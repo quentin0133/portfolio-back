@@ -49,7 +49,8 @@ public class SecurityConfig {
             "/api/projects"
         },
         HttpMethod.POST, new String[]{
-            "/api/auth/login"
+            "/api/auth/login",
+            "/api/email/send"
         },
         HttpMethod.OPTIONS, new String[]{"/**"}
     );

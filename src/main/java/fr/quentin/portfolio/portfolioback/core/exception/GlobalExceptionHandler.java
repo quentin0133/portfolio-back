@@ -1,5 +1,8 @@
 package fr.quentin.portfolio.portfolioback.core.exception;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.SendFailedException;
+import jakarta.mail.internet.AddressException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,13 @@ import java.util.Map;
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+    @ExceptionHandler(MessagingException.class)
+    protected ResponseEntity<Object> handleMessagingException(MessagingException me) {
+        if (me.getMessage().contains("Daily user sending quota exceeded") || me.getMessage().contains("rate limit exceeded"))
+            return getResponseEntity(me, HttpStatus.TOO_MANY_REQUESTS);
+        return getResponseEntity(me, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler({ResourceNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ResponseEntity<Object> handleNotFoundExceptions(RuntimeException ex) {
