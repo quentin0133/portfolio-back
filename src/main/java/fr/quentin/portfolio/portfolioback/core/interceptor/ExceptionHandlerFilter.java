@@ -27,7 +27,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     }
     catch (Exception ex) {
       Map<String, Object> res = new LinkedHashMap<>();
-      res.put("errors", HttpStatus.UNAUTHORIZED);
+      res.put("errors", HttpStatus.UNAUTHORIZED.value());
       res.put("status", ex.getMessage());
 
       String jsonString = new ObjectMapper().writeValueAsString(res);

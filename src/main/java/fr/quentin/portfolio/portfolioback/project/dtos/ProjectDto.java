@@ -1,8 +1,9 @@
 package fr.quentin.portfolio.portfolioback.project.dtos;
 
-import fr.quentin.portfolio.portfolioback.categories.dtos.CategoryDto;
+import fr.quentin.portfolio.portfolioback.core.enums.ProjectCategory;
 import fr.quentin.portfolio.portfolioback.core.generic.BaseDto;
 import fr.quentin.portfolio.portfolioback.files.dtos.FileDto;
+import fr.quentin.portfolio.portfolioback.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ public class ProjectDto extends BaseDto {
 
     private List<FileDto> files;
 
-    private List<CategoryDto> categories;
+    private ProjectCategory category;
 
     private LocalDate startDate;
 
@@ -37,4 +38,6 @@ public class ProjectDto extends BaseDto {
     private String demoLink;
 
     private String status;
+
+    private List<Tag> tags;
 }

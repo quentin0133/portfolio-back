@@ -46,7 +46,9 @@ public class SecurityConfig {
         HttpMethod.GET, new String[]{
             "/api/ping",
             "/api/verify-token",
-            "/api/projects"
+            "/api/projects",
+            "/api/settings/**",
+            "/files/**"
         },
         HttpMethod.POST, new String[]{
             "/api/auth/login",

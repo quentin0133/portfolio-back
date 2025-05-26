@@ -1,9 +1,10 @@
 package fr.quentin.portfolio.portfolioback.project;
 
-import fr.quentin.portfolio.portfolioback.categories.Category;
-import fr.quentin.portfolio.portfolioback.files.File;
+import fr.quentin.portfolio.portfolioback.core.enums.ProjectCategory;
 import fr.quentin.portfolio.portfolioback.core.enums.ProjectStatus;
 import fr.quentin.portfolio.portfolioback.core.generic.BaseEntity;
+import fr.quentin.portfolio.portfolioback.files.File;
+import fr.quentin.portfolio.portfolioback.tags.Tag;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -35,33 +36,44 @@ public class Project extends BaseEntity {
     @Size(min = 1)
     private List<@NotBlank @Size(max = 300) String> features;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "fk_project_id", nullable = false)
+    @Embedded
+    @Column(nullable = false)
     private File coverImage;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @ElementCollection
+    @CollectionTable(
+        name = "project_files",
+        joinColumns = @JoinColumn(name = "project_id"),
+        foreignKey = @ForeignKey(name = "files_project_fk")
+    )
     private List<File> files;
 
-    @ManyToMany
-    @JoinTable(
-        name = "project_category",
-        joinColumns = @JoinColumn(name = "fk_project_id"),
-        inverseJoinColumns = @JoinColumn(name = "fk_category_id")
-    )
-    @OrderBy("categoryGroup.id ASC")
-    private List<Category> categories;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ProjectCategory category;
 
     private LocalDate startDate;
 
     private String idVideo;
 
     @Pattern(regexp = "^(http|https)://.*$", message = "Invalid URL format")
+    @Column(length = 500)
     private String gitLink;
 
     @Pattern(regexp = "^(http|https)://.*$", message = "Invalid URL format")
+    @Column(length = 500)
     private String demoLink;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
+    @Column(nullable = false)
     private ProjectStatus status;
+
+    @ManyToMany
+    @JoinTable(
+        name = "projects_tags",
+        joinColumns = @JoinColumn(name = "fk_project_id"),
+        inverseJoinColumns = @JoinColumn(name = "fk_tag_id")
+    )
+    @OrderBy("tagType ASC")
+    private List<Tag> tags;
 }

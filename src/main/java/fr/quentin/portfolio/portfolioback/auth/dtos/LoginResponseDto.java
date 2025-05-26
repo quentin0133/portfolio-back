@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public record LoginResponseDto(UserDto user, String token) implements Serializable {
-    public record UserDto(long id, int version, String username, List<String> roles)
+    public record UserDto(long id, String username, List<String> roles)
             implements Serializable {
     }
 }

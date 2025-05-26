@@ -1,6 +1,7 @@
-package fr.quentin.portfolio.portfolioback.categories.dtos;
+package fr.quentin.portfolio.portfolioback.tags.dtos;
 
 import fr.quentin.portfolio.portfolioback.core.generic.BaseDto;
+import fr.quentin.portfolio.portfolioback.tags.types.dtos.TagTypeDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CategoryPostDto extends BaseDto {
-    private String title;
-
-    private long idCategoryGroup;
+public class TagDto extends BaseDto {
+    private String name;
+    private TagTypeDto tagType;
 }

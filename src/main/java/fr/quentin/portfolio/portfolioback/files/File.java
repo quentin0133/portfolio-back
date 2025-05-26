@@ -1,25 +1,18 @@
 package fr.quentin.portfolio.portfolioback.files;
 
-import fr.quentin.portfolio.portfolioback.core.generic.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
+import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Table(name = "files")
-@AllArgsConstructor
-@NoArgsConstructor
+@Embeddable
 @Getter
 @Setter
-public class File extends BaseEntity {
-    @Lob
-    private byte[] data;
+@NoArgsConstructor
+@AllArgsConstructor
+public class File {
+    private String fileName;
 
-    private String name;
-
-    private String type;
+    private String storedFileName;
 }

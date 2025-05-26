@@ -16,9 +16,6 @@ public class User {
     @Id
     private long id;
 
-    @Version
-    private int version;
-
     @Column(unique = true)
     private String username;
 

@@ -1,15 +1,15 @@
 package fr.quentin.portfolio.portfolioback.core.exception;
 
 import jakarta.mail.MessagingException;
-import jakarta.mail.SendFailedException;
-import jakarta.mail.internet.AddressException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -25,14 +25,20 @@ public class GlobalExceptionHandler {
         return getResponseEntity(me, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({ResourceNotFoundException.class})
+    @ExceptionHandler({DuplicateKeyException.class})
+    @ResponseStatus(HttpStatus.CONFLICT)
+    protected ResponseEntity<Object> handleBadRequestExceptions(Exception ex) {
+        return getResponseEntity(ex, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler({ResourceNotFoundException.class, NoResourceFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    protected ResponseEntity<Object> handleNotFoundExceptions(RuntimeException ex) {
+    protected ResponseEntity<Object> handleNotFoundExceptions(Exception ex) {
         return getResponseEntity(ex, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    protected ResponseEntity<Object> handleForbiddenException(RuntimeException ex) {
+    protected ResponseEntity<Object> handleForbiddenException(Exception ex) {
         return getResponseEntity(ex, HttpStatus.FORBIDDEN);
     }
 
@@ -47,7 +53,7 @@ public class GlobalExceptionHandler {
         body.put("errors", status.value());
         body.put("status", ex.getMessage());
 
-        log.error(ex.getMessage());
+        log.error(ex.toString());
         Arrays.stream(ex.getStackTrace()).forEach(stackTrace -> log.error(stackTrace.toString()));
 
         return new ResponseEntity<>(body, status);

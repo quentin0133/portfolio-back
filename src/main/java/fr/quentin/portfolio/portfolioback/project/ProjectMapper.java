@@ -1,47 +1,42 @@
 package fr.quentin.portfolio.portfolioback.project;
 
-import fr.quentin.portfolio.portfolioback.categories.Category;
-import fr.quentin.portfolio.portfolioback.categories.CategoryMapper;
-import fr.quentin.portfolio.portfolioback.categories.CategoryRepository;
-import fr.quentin.portfolio.portfolioback.core.enums.ProjectStatus;
 import fr.quentin.portfolio.portfolioback.core.exception.ResourceNotFoundException;
 import fr.quentin.portfolio.portfolioback.core.generic.GenericMapperAbstract;
-import fr.quentin.portfolio.portfolioback.files.FileMapper;
+import fr.quentin.portfolio.portfolioback.files.File;
 import fr.quentin.portfolio.portfolioback.project.dtos.ProjectDto;
 import fr.quentin.portfolio.portfolioback.project.dtos.ProjectPostDto;
+import fr.quentin.portfolio.portfolioback.tags.Tag;
+import fr.quentin.portfolio.portfolioback.tags.TagRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = { CategoryMapper.class, FileMapper.class })
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public abstract class ProjectMapper extends GenericMapperAbstract<Project, ProjectDto, ProjectPostDto> {
-    private CategoryRepository categoryRepository;
-
-    @Override
-    @Mapping(source = "idsCategory", target = "categories", qualifiedByName = "findCategoryById")
-    @Mapping(source = "coverImage", target = "coverImage")
-    @Mapping(source = "files", target = "files")
-    public abstract Project toEntity(ProjectPostDto dto);
-
-    @Override
-    @Mapping(source = "status", target = "status", qualifiedByName = "statusToString")
-    public abstract ProjectDto toDto(Project entity);
-
-    @Named("findCategoryById")
-    protected Category findCategoryById(long idCategory) {
-        return categoryRepository.findById(idCategory)
-            .orElseThrow(() -> new ResourceNotFoundException("CategoryGroup", idCategory));
-    }
-
-    @Named("statusToString")
-    protected String statusToString(ProjectStatus projectStatus) {
-        return projectStatus.getDescription();
-    }
+    private TagRepository tagRepository;
 
     @Autowired
-    public void setCategoryRepository(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public void setTagRepository(TagRepository tagRepository) {
+        this.tagRepository = tagRepository;
+    }
+
+    @Override
+    @Mapping(source = "idsTag", target = "tags", qualifiedByName = "findTagById")
+    @Mapping(source = "coverImage", target = "coverImage")
+    @Mapping(target = "files", ignore = true)
+    public abstract Project toEntity(ProjectPostDto dto);
+
+    @Named("findTagById")
+    protected Tag findTagById(long idTag) {
+        return tagRepository.findById(idTag)
+            .orElseThrow(() -> new ResourceNotFoundException("Tag", idTag));
+    }
+
+    protected File fileNameToAbstractRessource(MultipartFile multipartFile) {
+        if (multipartFile == null) return null;
+        return new File(multipartFile.getOriginalFilename(), null);
     }
 }

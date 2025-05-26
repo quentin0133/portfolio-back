@@ -1,5 +1,6 @@
 package fr.quentin.portfolio.portfolioback.project.dtos;
 
+import fr.quentin.portfolio.portfolioback.core.enums.ProjectCategory;
 import fr.quentin.portfolio.portfolioback.core.enums.ProjectStatus;
 import fr.quentin.portfolio.portfolioback.core.generic.BaseDto;
 import lombok.AllArgsConstructor;
@@ -24,9 +25,7 @@ public class ProjectPostDto extends BaseDto {
 
     private MultipartFile coverImage;
 
-    private List<MultipartFile> files;
-
-    private List<Long> idsCategory;
+    private ProjectCategory category;
 
     private LocalDate startDate;
 
@@ -37,4 +36,6 @@ public class ProjectPostDto extends BaseDto {
     private String demoLink;
 
     private ProjectStatus status;
+
+    private List<Long> idsTag;
 }
