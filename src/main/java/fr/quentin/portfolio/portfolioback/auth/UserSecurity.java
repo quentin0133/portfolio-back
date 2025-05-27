@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+/**
+ * The type User security.
+ */
 public class UserSecurity implements UserDetails {
 
     private final Collection<? extends GrantedAuthority> authorities;
@@ -15,6 +18,11 @@ public class UserSecurity implements UserDetails {
     @Getter
     private final User user;
 
+    /**
+     * Instantiates a new User security.
+     *
+     * @param user the user
+     */
     public UserSecurity(User user) {
         this.user = user;
         authorities = user.getRoles().stream().map(SimpleGrantedAuthority::new).toList();

@@ -12,9 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type File utils.
+ */
 public class FileUtils {
+    private FileUtils() {
+    }
+
     private static final Path rootLocation = Paths.get("files");
 
+    /**
+     * Upload file.
+     *
+     * @param file the file
+     * @return the file
+     * @throws IOException the io exception
+     */
     public static File upload(MultipartFile file) throws IOException {
         if (file == null) return null;
 
@@ -24,6 +37,13 @@ public class FileUtils {
         return new File(file.getOriginalFilename(), pathFile);
     }
 
+    /**
+     * Upload list.
+     *
+     * @param files the files
+     * @return the list
+     * @throws IOException the io exception
+     */
     public static List<File> upload(List<MultipartFile> files) throws IOException {
         if (files == null || files.isEmpty()) return new ArrayList<>();
 
@@ -33,11 +53,22 @@ public class FileUtils {
         return listFiles;
     }
 
+    /**
+     * Delete.
+     *
+     * @param file the file
+     * @throws IOException the io exception
+     */
     public static void delete(File file) throws IOException {
-        System.out.println(file);
         Files.deleteIfExists(rootLocation.resolve(file.getStoredFileName()));
     }
 
+    /**
+     * Delete.
+     *
+     * @param files the files
+     * @throws IOException the io exception
+     */
     public static void delete(List<File> files) throws IOException {
         for (File file : files) {
             Files.deleteIfExists(rootLocation.resolve(file.getStoredFileName()));

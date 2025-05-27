@@ -17,29 +17,65 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * The type Jwt utils.
+ */
 public class JwtUtils {
     private static final long TOKEN_DURATION = Duration.ofSeconds(SecurityConfig.getEXPIRATION_TIME_SECONDS())
                                                     .toMillis(); // 1H
     private static final long REFRESH_TOKEN_DURATION = Duration.ofSeconds(SecurityConfig.getEXPIRATION_TIME_SECONDS() * 7L)
                                                             .toMillis(); // 1H
 
+    /**
+     * Extract username string.
+     *
+     * @param jwtToken the jwt token
+     * @return the string
+     */
     public static String extractUsername(String jwtToken) {
         return extractClaim(jwtToken, Claims::getSubject);
     }
 
+    /**
+     * Validate token boolean.
+     *
+     * @param jwtToken    the jwt token
+     * @param userDetails the user details
+     * @return the boolean
+     */
     public static boolean validateToken(String jwtToken, UserDetails userDetails) {
         final String username = extractUsername(jwtToken);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(jwtToken);
     }
 
+    /**
+     * Is token expired boolean.
+     *
+     * @param jwtToken the jwt token
+     * @return the boolean
+     */
     public static boolean isTokenExpired(String jwtToken) {
         return extractExpiration(jwtToken).isBefore(LocalDate.now());
     }
 
+    /**
+     * Extract expiration local date.
+     *
+     * @param jwtToken the jwt token
+     * @return the local date
+     */
     public static LocalDate extractExpiration(String jwtToken) {
         return convertToLocalDateViaInstant(extractClaim(jwtToken, Claims::getExpiration));
     }
 
+    /**
+     * Extract claim t.
+     *
+     * @param <T>            the type parameter
+     * @param jwtToken       the jwt token
+     * @param claimsResolver the claims resolver
+     * @return the t
+     */
     public static <T> T extractClaim(String jwtToken, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(jwtToken);
         return claimsResolver.apply(claims);
@@ -55,6 +91,12 @@ public class JwtUtils {
                 .toLocalDate();
     }
 
+    /**
+     * Generate token string.
+     *
+     * @param userDetails the user details
+     * @return the string
+     */
     public static String generateToken(UserDetails userDetails) {
         return createToken(userDetails, new Date(System.currentTimeMillis() + TOKEN_DURATION));
     }
@@ -67,6 +109,12 @@ public class JwtUtils {
                 .compact();
     }
 
+    /**
+     * Gets token from request.
+     *
+     * @param request the request
+     * @return the token from request
+     */
     public static String getTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {

@@ -7,7 +7,6 @@ import fr.quentin.portfolio.portfolioback.files.File;
 import fr.quentin.portfolio.portfolioback.tags.Tag;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +16,9 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * The type Project.
+ */
 @Entity
 @Table(name = "projects")
 @AllArgsConstructor
@@ -54,13 +56,12 @@ public class Project extends BaseEntity {
 
     private LocalDate startDate;
 
+    @Column(length = 11)
     private String idVideo;
 
-    @Pattern(regexp = "^(http|https)://.*$", message = "Invalid URL format")
     @Column(length = 500)
     private String gitLink;
 
-    @Pattern(regexp = "^(http|https)://.*$", message = "Invalid URL format")
     @Column(length = 500)
     private String demoLink;
 

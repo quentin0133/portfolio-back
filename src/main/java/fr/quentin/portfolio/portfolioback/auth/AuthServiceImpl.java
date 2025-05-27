@@ -1,7 +1,7 @@
 package fr.quentin.portfolio.portfolioback.auth;
 
-import fr.quentin.portfolio.portfolioback.auth.dtos.LoginDto;
-import fr.quentin.portfolio.portfolioback.auth.dtos.LoginResponseDto;
+import fr.quentin.portfolio.portfolioback.auth.dtos.LoginCommandDto;
+import fr.quentin.portfolio.portfolioback.auth.dtos.LoginQueryDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
+/**
+ * The type Auth service.
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -25,7 +28,7 @@ public class AuthServiceImpl implements AuthService {
   private final AuthenticationManager authenticationManager;
 
   @Override
-  public LoginResponseDto authenticate(LoginDto login) throws AuthenticationException {
+  public LoginQueryDto authenticate(LoginCommandDto login) throws AuthenticationException {
     Authentication authenticate =
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.username(), login.password()));
     if (authenticate.isAuthenticated()) {

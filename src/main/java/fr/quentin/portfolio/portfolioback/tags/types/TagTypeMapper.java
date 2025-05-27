@@ -5,6 +5,9 @@ import fr.quentin.portfolio.portfolioback.tags.types.dtos.TagTypeDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
+/**
+ * The interface Tag type mapper.
+ */
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface TagTypeMapper extends GenericMapper<TagType, TagTypeDto, TagTypeDto> {
 }

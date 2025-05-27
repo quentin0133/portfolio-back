@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+/**
+ * The type Jwt auth filter.
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {

@@ -1,7 +1,7 @@
 package fr.quentin.portfolio.portfolioback.project.dtos;
 
 import fr.quentin.portfolio.portfolioback.core.enums.ProjectCategory;
-import fr.quentin.portfolio.portfolioback.core.generic.BaseDto;
+import fr.quentin.portfolio.portfolioback.core.generic.BaseQueryDto;
 import fr.quentin.portfolio.portfolioback.files.dtos.FileDto;
 import fr.quentin.portfolio.portfolioback.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -12,11 +12,14 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * The type Project query dto.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class ProjectDto extends BaseDto {
+public class ProjectQueryDto extends BaseQueryDto {
     private String title;
 
     private String summary;

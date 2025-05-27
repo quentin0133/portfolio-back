@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * The type Base entity.
+ */
 @MappedSuperclass
 @Getter
 @Setter
@@ -14,10 +17,16 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 public abstract class BaseEntity {
+    /**
+     * The Id.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
+    /**
+     * The Version.
+     */
     @Version
     protected int version;
 

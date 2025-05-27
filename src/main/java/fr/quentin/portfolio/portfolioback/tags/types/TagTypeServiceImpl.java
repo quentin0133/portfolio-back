@@ -1,12 +1,9 @@
-package fr.quentin.portfolio.portfolioback.TagTypes.types;
+package fr.quentin.portfolio.portfolioback.tags.types;
 
 import fr.quentin.portfolio.portfolioback.core.exception.ResourceNotFoundException;
 import fr.quentin.portfolio.portfolioback.core.tools.ValidationUtils;
-import fr.quentin.portfolio.portfolioback.project.Project;
-import fr.quentin.portfolio.portfolioback.tags.types.TagType;
-import fr.quentin.portfolio.portfolioback.tags.types.TagTypeMapper;
-import fr.quentin.portfolio.portfolioback.tags.types.TagTypeRepository;
-import fr.quentin.portfolio.portfolioback.tags.types.TagTypeService;
+import fr.quentin.portfolio.portfolioback.tags.ResourceConstraintViolationException;
+import fr.quentin.portfolio.portfolioback.tags.TagRepository;
 import fr.quentin.portfolio.portfolioback.tags.types.dtos.TagTypeDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +14,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type Tag type service.
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class TagTypeServiceImpl implements TagTypeService {
     private final TagTypeRepository repository;
     private final TagTypeMapper mapper;
+
+    private final TagRepository tagRepository;
 
     @Override
     public Page<TagTypeDto> findAll(Pageable pageable) {
@@ -45,7 +47,7 @@ public class TagTypeServiceImpl implements TagTypeService {
 
     @Override
     public TagTypeDto update(TagTypeDto dto) {
-        if (!repository.existsById(dto.getId())) throw new ResourceNotFoundException("Project", dto.getId());
+        if (!repository.existsById(dto.getId())) throw new ResourceNotFoundException("TagType", dto.getId());
 
         // Duplicate name check
         ValidationUtils.checkDuplicateByName(
@@ -61,6 +63,7 @@ public class TagTypeServiceImpl implements TagTypeService {
     @Override
     public void deleteById(long id) {
         if (!repository.existsById(id)) throw new ResourceNotFoundException("TagType", id);
+        if (tagRepository.existsByTagType_Id(id)) throw new ResourceConstraintViolationException("TagType", "Tag", id);
         repository.deleteById(id);
     }
 

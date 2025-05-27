@@ -30,9 +30,11 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Security config.
+ */
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 @RequiredArgsConstructor
 @Slf4j
 public class SecurityConfig {
@@ -69,22 +71,46 @@ public class SecurityConfig {
     @Value("${front.app.url}")
     private String frontUrl;
 
+    /**
+     * Sets secret key.
+     *
+     * @param secretKey the secret key
+     */
     @Value("${secret.key}")
     public void setSecretKey(String secretKey) {
       SECRET_KEY = secretKey;
     }
 
+    /**
+     * Password encoder password encoder.
+     *
+     * @return the password encoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Authentication manager authentication manager.
+     *
+     * @param authenticationConfiguration the authentication configuration
+     * @return the authentication manager
+     * @throws Exception the exception
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    /**
+     * Security filter chain security filter chain.
+     *
+     * @param http the http
+     * @return the security filter chain
+     * @throws Exception the exception
+     */
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.cors(cors -> cors
@@ -114,6 +140,11 @@ public class SecurityConfig {
                 .build();
     }
 
+    /**
+     * My mvc configurer web mvc configurer.
+     *
+     * @return the web mvc configurer
+     */
     @Bean
     public WebMvcConfigurer myMvcConfigurer() {
         return new WebMvcConfigurer() {

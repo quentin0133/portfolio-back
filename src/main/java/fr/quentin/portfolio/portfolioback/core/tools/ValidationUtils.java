@@ -29,19 +29,18 @@ public class ValidationUtils {
 
     /**
      * Checks for duplicate entities based on a unique name constraint.
-     *
+     * <p>
      * This utility method helps enforce uniqueness on a given name field
      * by querying the data store for existing entities with the same name.
      * If an entity with the same name exists and does not match the current id,
      * a {@link DuplicateKeyException} is thrown.
      *
-     * @param name          The name to check for uniqueness.
-     * @param currentId     The ID of the current entity (used to ignore self when updating).
-     * @param finderByName  A function that returns a list of matching entities for a given name.
-     * @param idExtractor   A function that extracts the ID from an entity.
-     * @param <T>           The type of the entity.
-     * @param <I>           The type of the entity ID.
-     *
+     * @param <T>          The type of the entity.
+     * @param <I>          The type of the entity ID.
+     * @param name         The name to check for uniqueness.
+     * @param currentId    The ID of the current entity (used to ignore self when updating).
+     * @param finderByName A function that returns a list of matching entities for a given name.
+     * @param idExtractor  A function that extracts the ID from an entity.
      * @throws DuplicateKeyException if a duplicate name is found with a different ID.
      */
     public static <T, I> void checkDuplicateByName(
@@ -52,7 +51,7 @@ public class ValidationUtils {
     ) {
         List<T> results = finderByName.apply(name);
         if (!results.isEmpty() && (results.size() > 1 || !idExtractor.apply(results.get(0)).equals(currentId))) {
-            throw new DuplicateKeyException(name);
+            throw new DuplicateKeyException("%s already exits and needs to be unique!".formatted(name));
         }
     }
 

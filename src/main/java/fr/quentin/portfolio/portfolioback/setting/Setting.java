@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * The type Setting.
+ */
 @Entity
 @Table(name = "settings")
 @NoArgsConstructor
@@ -23,5 +26,6 @@ public class Setting {
     @Column(name = "setting_value", nullable = false)
     private String value;
 
+    @Column(nullable = false)
     private boolean isProtected;
 }

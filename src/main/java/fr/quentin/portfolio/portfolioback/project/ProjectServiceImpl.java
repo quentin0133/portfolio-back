@@ -5,8 +5,8 @@ import fr.quentin.portfolio.portfolioback.core.exception.ResourceNotFoundExcepti
 import fr.quentin.portfolio.portfolioback.core.tools.FileUtils;
 import fr.quentin.portfolio.portfolioback.core.tools.ValidationUtils;
 import fr.quentin.portfolio.portfolioback.files.dtos.FileDto;
-import fr.quentin.portfolio.portfolioback.project.dtos.ProjectDto;
-import fr.quentin.portfolio.portfolioback.project.dtos.ProjectPostDto;
+import fr.quentin.portfolio.portfolioback.project.dtos.ProjectCommandDto;
+import fr.quentin.portfolio.portfolioback.project.dtos.ProjectQueryDto;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
@@ -18,6 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * The type Project service.
+ */
 @Service
 @Transactional
 @AllArgsConstructor
@@ -26,21 +29,19 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectMapper mapper;
 
     @Override
-    public Page<ProjectDto> findAll(Pageable pageable) {
+    public Page<ProjectQueryDto> findAll(Pageable pageable) {
         return repository.findAll(pageable).map(mapper::toDto);
     }
 
     @Override
-    public List<ProjectDto> findAll() {
+    public List<ProjectQueryDto> findAll() {
         return repository.findAll().stream().map(mapper::toDto).toList();
     }
 
     @Override
-    public ProjectDto save(ProjectPostDto dto) throws IOException {
-        if (repository.existsByTitle(dto.getTitle())) {
+    public ProjectQueryDto save(ProjectCommandDto dto) throws IOException {
+        if (repository.existsByTitle(dto.getTitle()))
             throw new DuplicateKeyException(dto.getTitle());
-        }
-
         if (ValidationUtils.checkFileType(dto.getCoverImage(), "image/*"))
             throw new FileWrongFormatException("coverImage", "image");
 
@@ -53,7 +54,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto update(ProjectPostDto dto) throws ResourceNotFoundException, IOException {
+    public ProjectQueryDto update(ProjectCommandDto dto) throws ResourceNotFoundException, IOException {
         if (!repository.existsById(dto.getId())) throw new ResourceNotFoundException("Project", dto.getId());
 
         // Duplicate title check
@@ -95,7 +96,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto findById(long id) {
+    public ProjectQueryDto findById(long id) {
         return repository.findById(id).map(mapper::toDto).orElseThrow(() -> new ResourceNotFoundException("Project", id));
     }
 

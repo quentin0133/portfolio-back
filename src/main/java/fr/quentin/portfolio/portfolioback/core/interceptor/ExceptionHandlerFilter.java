@@ -15,6 +15,9 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * The type Exception handler filter.
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j

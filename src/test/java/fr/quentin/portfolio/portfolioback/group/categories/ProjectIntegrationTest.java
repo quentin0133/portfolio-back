@@ -22,6 +22,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * The type Project integration test.
+ */
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -35,12 +38,20 @@ class ProjectIntegrationTest {
 
     private static String jwtToken;
 
+    /**
+     * Sets .
+     */
     @BeforeEach
     public void setup() {
         UserDetails user = new UserSecurity(new User(0, 0, "johndoe", "password123", List.of("ADMIN")));
         jwtToken = JwtUtils.generateToken(user);
     }
 
+    /**
+     * Find all.
+     *
+     * @throws Exception the exception
+     */
     @Test
     void findAll() throws Exception {
         mockMvc.perform(get("/api/projects"))

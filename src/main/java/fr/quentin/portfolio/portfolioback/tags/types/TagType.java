@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * The type Tag type.
+ */
 @Entity
 @Table(name = "tag_types")
 @AllArgsConstructor

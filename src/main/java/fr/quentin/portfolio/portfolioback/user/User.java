@@ -1,11 +1,17 @@
 package fr.quentin.portfolio.portfolioback.user;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type User.
+ */
 @Entity
 @Getter
 @Setter
@@ -16,9 +22,10 @@ public class User {
     @Id
     private long id;
 
-    @Column(unique = true)
+    @Column(unique = true, length = 30)
     private String username;
 
+    @Column(length = 30)
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)

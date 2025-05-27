@@ -8,6 +8,9 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
+/**
+ * The type Email config.
+ */
 @Configuration
 public class EmailConfig {
     @Value("${spring.mail.host}")
@@ -28,6 +31,11 @@ public class EmailConfig {
     @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
     private boolean starttls;
 
+    /**
+     * Java mail sender java mail sender.
+     *
+     * @return the java mail sender
+     */
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
