@@ -1,9 +1,6 @@
 app = "portfolio-back-qw9pyq"
 primary_region = "cdg"
 
-[build]
-    builder = "paketobuildpacks/builder:base"
-
 [env]
     JAVA_OPTS = "-Xmx512m"
 
