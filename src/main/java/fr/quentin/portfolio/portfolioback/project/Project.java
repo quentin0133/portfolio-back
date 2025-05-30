@@ -3,6 +3,7 @@ package fr.quentin.portfolio.portfolioback.project;
 import fr.quentin.portfolio.portfolioback.core.enums.ProjectCategory;
 import fr.quentin.portfolio.portfolioback.core.enums.ProjectStatus;
 import fr.quentin.portfolio.portfolioback.core.generic.BaseEntity;
+import fr.quentin.portfolio.portfolioback.core.validations.groups.Default;
 import fr.quentin.portfolio.portfolioback.files.File;
 import fr.quentin.portfolio.portfolioback.tags.Tag;
 import jakarta.persistence.*;
@@ -35,8 +36,8 @@ public class Project extends BaseEntity {
     private String summary;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @Size(min = 1)
-    private List<@NotBlank @Size(max = 300) String> features;
+    @Size(groups = Default.class, min = 1)
+    private List<@NotBlank @Size(groups = Default.class, max = 300) String> features;
 
     @Embedded
     @Column(nullable = false)

@@ -19,18 +19,18 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TagType extends BaseEntity {
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 40)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 7)
     private String textColorLight; // hexa with strong color
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 7)
     private String textColorDark; // hexa with strong color
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 7)
     private String backgroundColorLight; // hexa with strong color
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 7)
     private String backgroundColorDark; // hexa with strong color
 }

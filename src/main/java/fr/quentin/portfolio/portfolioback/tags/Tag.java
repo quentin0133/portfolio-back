@@ -21,9 +21,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Tag extends BaseEntity {
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 40)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private TagType tagType;
 }
