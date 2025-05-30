@@ -23,5 +23,5 @@ primary_region = 'cdg'
   memory_mb = 1024
 
 [mounts]
-  source = "vol_4mlm6xyylm251jzv"
+  source = "files_volume"
   destination = "/files"
