@@ -1,8 +1,8 @@
 package fr.quentin.portfolio.portfolioback.group.categories;
 
 import fr.quentin.portfolio.portfolioback.auth.UserSecurity;
-import fr.quentin.portfolio.portfolioback.categories.CategoryRepository;
 import fr.quentin.portfolio.portfolioback.core.tools.JwtUtils;
+import fr.quentin.portfolio.portfolioback.project.ProjectRepository;
 import fr.quentin.portfolio.portfolioback.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class ProjectIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private ProjectRepository projectRepository;
 
     private static String jwtToken;
 
@@ -43,7 +43,7 @@ class ProjectIntegrationTest {
      */
     @BeforeEach
     public void setup() {
-        UserDetails user = new UserSecurity(new User(0, 0, "johndoe", "password123", List.of("ADMIN")));
+        UserDetails user = new UserSecurity(new User("johndoe", "password123", List.of("ADMIN")));
         jwtToken = JwtUtils.generateToken(user);
     }
 
@@ -61,7 +61,7 @@ class ProjectIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isNotEmpty())
-            .andExpect(jsonPath("$.size()").value(categoryRepository.findAll().size()));
+            .andExpect(jsonPath("$.size()").value(projectRepository.findAll().size()));
     }
 
     //    @Test

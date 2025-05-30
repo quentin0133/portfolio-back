@@ -1,55 +1,48 @@
-INSERT INTO `app_users` (`id`, `password`, `username`)
+INSERT INTO `app_users` (`version`, `password`, `username`)
 VALUES
-    (1, 'password123', 'johndoe'),
-    (2, 'mypassword456', 'janedoe'),
-    (3, 'securePass789', 'alice'),
-    (4, 'password321', 'bob'),
-    (5, 'strongpass101', 'charlie');
+    (0, 'password123', 'johndoe'),
+    (0, 'mypassword456', 'janedoe'),
+    (0, 'securePass789', 'alice'),
+    (0, 'password321', 'bob'),
+    (0, 'strongpass101', 'charlie');
 
-INSERT INTO `tags` (`version`, `background_color`, `tag_name`)
+INSERT INTO `tag_types` (`version`, `name`, `background_color_dark`, `background_color_light`,
+                         `text_color_dark`, `text_color_light`)
 VALUES
-    (1, '#3479ba', 'General'),
-    (2, '#3479ba', 'Spring'),
-    (1, '#3479ba', 'Angular'),
-    (3, '#3479ba', 'Fullstack'),
-    (2, '#3479ba', 'MariaDB');
+    (1, 'Technologies', '#3479ba', '#3479ba', '#ffffff', '#ffffff'),
+    (2, 'Languages', '#401ac9', '#401ac9', '#ffffff', '#ffffff'),
+    (1, 'Soft skills', '#3479ba', '#3479ba', '#ffffff', '#ffffff'),
+    (3, 'Librairies', '#9c0e7d', '#9c860e', '#918a63', '#639163'),
+    (2, 'Design', '#3479ba', '#3479ba', '#ffffff', '#ffffff');
 
-INSERT INTO `categories` (`version`, `title`, `fk_category_id`)
+INSERT INTO `tags` (`version`, `name`, `tag_type_id`)
 VALUES
-    (1, 'Technology', 1),
-    (2, 'Lifestyle', 2),
-    (1, 'Business', 1),
-    (3, 'Entertainment', 3),
-    (2, 'Health', 2);
+    (1, 'Angular', 1),
+    (2, 'Java', 2),
+    (1, 'React', 1),
+    (3, 'Perfectionniste', 3),
+    (2, 'SQL', 2);
 
-INSERT INTO `files` (`version`, `data`, `name`, `type`)
+INSERT INTO `projects` (`version`, `demo_link`, `git_link`, `id_video`, `start_date`, `status`, `summary`, `title`, `category`, `file_name`, `stored_file_name`)
 VALUES
-    (1, NULL, 'document1.pdf', 'application/pdf'),
-    (2, NULL, 'image1.jpg', 'image/jpeg'),
-    (1, NULL, 'spreadsheet.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
-    (3, NULL, 'presentation.pptx', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'),
-    (2, NULL, 'archive.zip', 'application/zip');
+    (1, 'https://demo.project1.com', 'https://github.com/user/project1', 'video123', '2024-01-10', 'MAINTAINED', 'This project involves building a fully functional e-commerce platform.', 'E-Commerce Platform', 'PERSONAL_PROJECT', 'cover_image_1.png', NULL),
+    (2, 'https://demo.project2.com', 'https://github.com/user/project2', 'video124', '2024-02-15', 'ARCHIVED', 'Mobile app development for health tracking.', 'Health Tracker App', 'PERSONAL_PROJECT', 'cover_image_2.png', NULL),
+    (3, 'https://demo.project3.com', 'https://github.com/user/project3', 'video125', '2024-03-05', 'CANCELLED', 'VR game development for immersive experiences.', 'Virtual Reality Game', 'PROFESSIONAL_PROJECT', 'cover_image_3.png', NULL),
+    (1, 'https://demo.project4.com', 'https://github.com/user/project4', 'video126', '2024-04-20', 'ARCHIVED', 'A desktop application for cloud-based document management.', 'Document Manager', 'PROFESSIONAL_PROJECT', 'cover_image_4.png', NULL),
+    (2, 'https://demo.project5.com', 'https://github.com/user/project5', 'video127', '2024-05-01', 'IN_PROGRESS', 'A project focused on creating an interactive social media platform.', 'Social Media Platform', 'PROFESSIONAL_PROJECT', 'cover_image_5.png', NULL);
 
-INSERT INTO `projects` (`version`, `demo_link`, `git_link`, `id_video`, `start_date`, `status`, `summary`, `title`, `fk_project_id`)
+INSERT INTO `project_files` (`project_id`, `file_name`, `stored_file_name`)
 VALUES
-    (1, 'https://demo.project1.com', 'https://github.com/user/project1', 'video123', '2024-01-10', 'IN_PROGRESS', 'This project involves building a fully functional e-commerce platform.', 'E-Commerce Platform', 1),
-    (2, 'https://demo.project2.com', 'https://github.com/user/project2', 'video124', '2024-02-15', 'FINISHED', 'Mobile app development for health tracking.', 'Health Tracker App', 2),
-    (3, 'https://demo.project3.com', 'https://github.com/user/project3', 'video125', '2024-03-05', 'ON_BREAK', 'VR game development for immersive experiences.', 'Virtual Reality Game', 3),
-    (1, 'https://demo.project4.com', 'https://github.com/user/project4', 'video126', '2024-04-20', 'ARCHIVED', 'A desktop application for cloud-based document management.', 'Document Manager', 4),
-    (2, 'https://demo.project5.com', 'https://github.com/user/project5', 'video127', '2024-05-01', 'IN_PROGRESS', 'A project focused on creating an interactive social media platform.', 'Social Media Platform', 5);
+    (1, 'document1.pdf', NULL),
+    (2, 'image1.jpg', NULL),
+    (1, 'spreadsheet.xlsx', NULL),
+    (3, 'presentation.pptx', NULL),
+    (2, 'archive.zip', NULL);
 
-INSERT INTO `project_category` (`fk_project_id`, `fk_category_id`)
+INSERT INTO `projects_tags` (`fk_project_id`, `fk_tag_id`)
 VALUES
     (1, 1),
-    (2, 2),
-    (3, 3),
-    (4, 1),
-    (5, 4);
-
-INSERT INTO `project_tags` (`fk_project_id`, `fk_tags_id`)
-VALUES
-    (1, 1),
-    (2, 2),
+    (1, 2),
     (3, 3),
     (4, 1),
     (5, 4);
@@ -62,26 +55,18 @@ VALUES
     (4, 'Desktop application, Data synchronization, Cloud integration'),
     (5, 'E-commerce platform, Payment gateway, User authentication');
 
-INSERT INTO `projects_files` (`project_id`, `files_id`)
+INSERT INTO `settings` (`version`, `setting_key`, `is_protected`, `setting_value`)
 VALUES
-    (1, 1),
-    (2, 2),
-    (3, 3),
-    (4, 4),
-    (5, 5);
-
-INSERT INTO `settings` (`setting_key`, `is_protected`, `setting_value`)
-VALUES
-    ('site_name', 1, 'My Awesome Site'),    -- Exemple de paramètre protégé (is_protected = 1)
-    ('site_url', 0, 'https://www.awesomesite.com'),  -- Exemple de paramètre non protégé
-    ('maintenance_mode', 0, 'false'),       -- Exemple de paramètre non protégé (mode maintenance)
-    ('max_upload_size', 1, '50MB'),         -- Exemple de paramètre protégé
-    ('timezone', 0, 'UTC');                 -- Exemple de paramètre non protégé
+    (0, 'site_name', 1, 'My Awesome Site'),
+    (0, 'site_url', 0, 'https://www.awesomesite.com'),
+    (0, 'maintenance_mode', 0, 'false'),
+    (0, 'max_upload_size', 1, '50MB'),
+    (0, 'timezone', 0, 'UTC');
 
 INSERT INTO `user_roles` (`user_id`, `roles`)
 VALUES
-    (1, 'ADMIN'),  -- L'utilisateur avec ID 1 a le rôle ADMIN
-    (2, 'USER'),   -- L'utilisateur avec ID 2 a le rôle USER
-    (3, 'MODERATOR'),  -- L'utilisateur avec ID 3 a le rôle MODERATOR
-    (4, 'USER'),   -- L'utilisateur avec ID 4 a le rôle USER
-    (5, 'ADMIN');  -- L'utilisateur avec ID 5 a le rôle ADMIN
+    (1, 'ADMIN'),
+    (2, 'USER'),
+    (3, 'MODERATOR'),
+    (4, 'USER'),
+    (5, 'ADMIN');
