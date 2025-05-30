@@ -67,8 +67,8 @@ public class SecurityConfig {
     private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final UserDetailsService userDetailsService;
 
-    @Value("${front.app.url}")
-    private String frontUrl;
+    @Value("${front.app.urls}")
+    private String[] frontUrls;
 
     /**
      * Sets secret key.
@@ -115,7 +115,7 @@ public class SecurityConfig {
         return http.cors(cors -> cors
                         .configurationSource(request -> {
                             var corsConfiguration = new CorsConfiguration();
-                            corsConfiguration.setAllowedOrigins(List.of(frontUrl));
+                            corsConfiguration.setAllowedOrigins(List.of(frontUrls));
                             corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                             corsConfiguration.setAllowedHeaders(List.of("*"));
                             corsConfiguration.setAllowCredentials(true);
@@ -149,7 +149,7 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins(frontUrl)
+                registry.addMapping("/**").allowedOrigins(frontUrls)
                         .allowedMethods("*", "GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true)
