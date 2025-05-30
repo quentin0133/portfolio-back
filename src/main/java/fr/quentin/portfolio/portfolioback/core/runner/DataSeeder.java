@@ -38,12 +38,5 @@ public class DataSeeder implements CommandLineRunner {
 
             userRepository.save(user);
         }
-
-        File dir = new File("files");
-        if (!dir.exists()) {
-            boolean created = dir.mkdirs();
-            if(created) log.info("'files' folder created at the root of the project!");
-            else log.error("Impossible to create the ‘files’ folder!");
-        }
     }
 }
