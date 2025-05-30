@@ -68,6 +68,9 @@ atlassian-ide-plugin.xml
 # SonarLint plugin
 .idea/sonarlint/
 
+# Javadocs plugin
+.idea/intellij-javadocs-4.0.1.xml
+
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
 crashlytics.properties
@@ -164,3 +167,5 @@ buildNumber.properties
 .env
 data
 files
+
+application-*.properties
