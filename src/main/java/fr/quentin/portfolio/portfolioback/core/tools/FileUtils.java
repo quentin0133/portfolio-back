@@ -1,6 +1,7 @@
 package fr.quentin.portfolio.portfolioback.core.tools;
 
 import fr.quentin.portfolio.portfolioback.files.File;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -19,7 +20,10 @@ public class FileUtils {
     private FileUtils() {
     }
 
-    private static final Path rootLocation = Paths.get("files");
+    @Value("${file.storage.path}")
+    private static String uploadDir;
+
+    private static final Path rootLocation = Paths.get(uploadDir);
 
     /**
      * Upload file.
