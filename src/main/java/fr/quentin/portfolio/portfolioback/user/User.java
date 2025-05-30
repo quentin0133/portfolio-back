@@ -1,5 +1,6 @@
 package fr.quentin.portfolio.portfolioback.user;
 
+import fr.quentin.portfolio.portfolioback.core.generic.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,14 +19,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "app_users")
-public class User {
-    @Id
-    private long id;
-
+public class User extends BaseEntity {
     @Column(unique = true, length = 30)
     private String username;
 
-    @Column(length = 30)
+    @Column(length = 60)
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)

@@ -12,8 +12,6 @@ import java.util.List;
 public record UserDto(long id,
                       @Size(groups = Default.class, max = 30, message = "the size of this property is limited to 30 characters")
                       String username,
-                      @Size(groups = Default.class, max = 30, message = "the size of this property is limited to 30 characters")
-                      String password,
                       List<String> roles)
     implements Serializable {
 }
