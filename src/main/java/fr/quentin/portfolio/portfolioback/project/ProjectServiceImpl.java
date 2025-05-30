@@ -9,6 +9,8 @@ import fr.quentin.portfolio.portfolioback.project.dtos.ProjectCommandDto;
 import fr.quentin.portfolio.portfolioback.project.dtos.ProjectQueryDto;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,10 +25,13 @@ import java.util.List;
  */
 @Service
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
-    private ProjectRepository repository;
-    private ProjectMapper mapper;
+    private final ProjectRepository repository;
+    private final ProjectMapper mapper;
+
+    @Value("${file.storage.path}")
+    private String uploadDir;
 
     @Override
     public Page<ProjectQueryDto> findAll(Pageable pageable) {
@@ -48,7 +53,7 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = mapper.toEntity(dto);
 
         // Upload cover image
-        project.setCoverImage(FileUtils.upload(dto.getCoverImage()));
+        project.setCoverImage(FileUtils.upload(dto.getCoverImage(), uploadDir));
 
         return mapper.toDto(repository.save(project));
     }
@@ -73,8 +78,8 @@ public class ProjectServiceImpl implements ProjectService {
 
         // Upload cover image
         if (dto.getCoverImage() != null) {
-            FileUtils.delete(oldProject.getCoverImage());
-            project.setCoverImage(FileUtils.upload(dto.getCoverImage()));
+            FileUtils.delete(oldProject.getCoverImage(), uploadDir);
+            project.setCoverImage(FileUtils.upload(dto.getCoverImage(), uploadDir));
         }
 
         return mapper.toDto(repository.save(project));
@@ -85,11 +90,11 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Project", id));
 
         if (project.getCoverImage() != null) {
-            FileUtils.delete(project.getCoverImage());
+            FileUtils.delete(project.getCoverImage(), uploadDir);
         }
 
         if (project.getFiles() != null) {
-            FileUtils.delete(project.getFiles());
+            FileUtils.delete(project.getFiles(), uploadDir);
         }
 
         repository.deleteById(id);
@@ -106,8 +111,8 @@ public class ProjectServiceImpl implements ProjectService {
 
         // Upload files
         if (files != null && !files.isEmpty()) {
-            FileUtils.delete(project.getFiles());
-            project.setFiles(FileUtils.upload(files));
+            FileUtils.delete(project.getFiles(), uploadDir);
+            project.setFiles(FileUtils.upload(files, uploadDir));
         }
 
         return mapper.toDto(repository.saveAndFlush(project)).getFiles();

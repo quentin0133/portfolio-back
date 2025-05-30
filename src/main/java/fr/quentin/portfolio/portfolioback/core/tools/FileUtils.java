@@ -20,11 +20,6 @@ public class FileUtils {
     private FileUtils() {
     }
 
-    @Value("${file.storage.path}")
-    private static String uploadDir;
-
-    private static final Path rootLocation = Paths.get(uploadDir);
-
     /**
      * Upload file.
      *
@@ -32,13 +27,13 @@ public class FileUtils {
      * @return the file
      * @throws IOException the io exception
      */
-    public static File upload(MultipartFile file) throws IOException {
+    public static File upload(MultipartFile file, String pathFile) throws IOException {
         if (file == null) return null;
 
-        String pathFile = "%s-%s".formatted(UUID.randomUUID(), file.getOriginalFilename());
-        Path destinationFile = rootLocation.resolve(pathFile).normalize().toAbsolutePath();
+        String generatedFile = "%s-%s".formatted(UUID.randomUUID(), file.getOriginalFilename());
+        Path destinationFile = Paths.get(pathFile).resolve(generatedFile).normalize().toAbsolutePath();
         Files.copy(file.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
-        return new File(file.getOriginalFilename(), pathFile);
+        return new File(file.getOriginalFilename(), "/%s/%s".formatted(pathFile, generatedFile));
     }
 
     /**
@@ -48,12 +43,12 @@ public class FileUtils {
      * @return the list
      * @throws IOException the io exception
      */
-    public static List<File> upload(List<MultipartFile> files) throws IOException {
+    public static List<File> upload(List<MultipartFile> files, String pathFile) throws IOException {
         if (files == null || files.isEmpty()) return new ArrayList<>();
 
         List<File> listFiles = new ArrayList<>();
         for (MultipartFile file : files)
-            listFiles.add(upload(file));
+            listFiles.add(upload(file, pathFile));
         return listFiles;
     }
 
@@ -63,8 +58,8 @@ public class FileUtils {
      * @param file the file
      * @throws IOException the io exception
      */
-    public static void delete(File file) throws IOException {
-        Files.deleteIfExists(rootLocation.resolve(file.getStoredFileName()));
+    public static void delete(File file, String path) throws IOException {
+        Files.deleteIfExists(Paths.get(path).resolve(file.getStoredFileName()));
     }
 
     /**
@@ -73,9 +68,9 @@ public class FileUtils {
      * @param files the files
      * @throws IOException the io exception
      */
-    public static void delete(List<File> files) throws IOException {
+    public static void delete(List<File> files, String pathFile) throws IOException {
         for (File file : files) {
-            Files.deleteIfExists(rootLocation.resolve(file.getStoredFileName()));
+            Files.deleteIfExists(Paths.get(pathFile).resolve(file.getStoredFileName()));
         }
     }
 }
