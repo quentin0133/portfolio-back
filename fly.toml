@@ -28,4 +28,4 @@ primary_region = 'cdg'
 
 [mounts]
   source = "portfolio_volume"
-  destination = "/files"
+  destination = "/data/uploads"
