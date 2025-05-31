@@ -27,5 +27,5 @@ primary_region = 'cdg'
   memory_mb = 256
 
 [mounts]
-  source = "pg_data"
+  source = "portfolio_volume"
   destination = "/files"
