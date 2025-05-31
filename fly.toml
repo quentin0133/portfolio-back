@@ -19,10 +19,10 @@ primary_region = 'cdg'
     hard_limit = 250
 
 [[vm]]
-  memory = '1gb'
+  memory = '512mb'
   cpu_kind = 'shared'
   cpus = 1
-  memory_mb = 1024
+  memory_mb = 512
 
 [mounts]
   source = "portfolio_volume"
