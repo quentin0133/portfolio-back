@@ -1,7 +1,6 @@
 package fr.quentin.portfolio.portfolioback.core.tools;
 
 import fr.quentin.portfolio.portfolioback.files.File;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -30,10 +29,20 @@ public class FileUtils {
     public static File upload(MultipartFile file, String pathFile) throws IOException {
         if (file == null) return null;
 
-        String generatedFile = "%s-%s".formatted(UUID.randomUUID(), file.getOriginalFilename());
-        Path destinationFile = Paths.get(pathFile).resolve(generatedFile).normalize().toAbsolutePath();
+        String originalFileName = file.getOriginalFilename();
+        String generatedFile = "%s-%s".formatted(UUID.randomUUID(), originalFileName);
+
+        Path rootPath = Paths.get(pathFile).toAbsolutePath().normalize();
+
+        if (!Files.exists(rootPath)) {
+            Files.createDirectories(rootPath);
+            System.out.println("Created a rootPath: " + rootPath);
+        }
+
+        Path destinationFile = rootPath.resolve(generatedFile).normalize();
         Files.copy(file.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
-        return new File(file.getOriginalFilename(), "/%s/%s".formatted(pathFile, generatedFile));
+
+        return new File(originalFileName, "/files/%s".formatted(generatedFile));
     }
 
     /**
