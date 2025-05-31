@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.io.FileNotFoundException;
 import java.security.SignatureException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -56,7 +57,7 @@ public class GlobalExceptionHandler {
      * @param ex the ex
      * @return the response entity
      */
-    @ExceptionHandler({ResourceNotFoundException.class, NoResourceFoundException.class})
+    @ExceptionHandler({ResourceNotFoundException.class, NoResourceFoundException.class, FileNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ResponseEntity<Object> handleNotFoundExceptions(Exception ex) {
         return getResponseEntity(ex, HttpStatus.NOT_FOUND);

@@ -15,7 +15,8 @@ public class StaticResourceConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/files/**")
-            .addResourceLocations("file:%s/".formatted(uploadDir));
+        if (!registry.hasMappingForPattern("/files/**"))
+            registry.addResourceHandler("/files/**")
+                .addResourceLocations("file:%s/".formatted(uploadDir));
     }
 }

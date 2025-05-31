@@ -3,6 +3,7 @@ package fr.quentin.portfolio.portfolioback.core.tools;
 import fr.quentin.portfolio.portfolioback.files.File;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,17 +33,17 @@ public class FileUtils {
         String originalFileName = file.getOriginalFilename();
         String generatedFile = "%s-%s".formatted(UUID.randomUUID(), originalFileName);
 
-        Path rootPath = Paths.get(pathFile).toAbsolutePath().normalize();
+        Path rootPath = Paths.get(pathFile);
 
         if (!Files.exists(rootPath)) {
             Files.createDirectories(rootPath);
             System.out.println("Created a rootPath: " + rootPath);
         }
 
-        Path destinationFile = rootPath.resolve(generatedFile).normalize();
+        Path destinationFile = rootPath.resolve(generatedFile);
         Files.copy(file.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
 
-        return new File(originalFileName, "/files/%s".formatted(generatedFile));
+        return new File(originalFileName, generatedFile);
     }
 
     /**
@@ -67,8 +68,15 @@ public class FileUtils {
      * @param file the file
      * @throws IOException the io exception
      */
-    public static void delete(File file, String path) throws IOException {
-        Files.deleteIfExists(Paths.get(path).resolve(file.getStoredFileName()));
+    public static void delete(File file, String filePath) throws IOException {
+        if (file == null) return;
+
+        Path path = Paths.get(filePath).resolve(file.getStoredFileName()).normalize();
+
+        if (!Files.exists(path))
+            throw new FileNotFoundException("File not found: " + path);
+
+        Files.delete(path);
     }
 
     /**
@@ -79,7 +87,7 @@ public class FileUtils {
      */
     public static void delete(List<File> files, String pathFile) throws IOException {
         for (File file : files) {
-            Files.deleteIfExists(Paths.get(pathFile).resolve(file.getStoredFileName()));
+            delete(file, pathFile);
         }
     }
 }
