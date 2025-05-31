@@ -29,3 +29,6 @@ primary_region = 'cdg'
 [mounts]
   source = "portfolio_volume"
   destination = "/data/uploads"
+
+[deploy]
+  regions = ["cdg"]
