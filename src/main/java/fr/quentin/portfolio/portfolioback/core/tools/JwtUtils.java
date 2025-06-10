@@ -82,7 +82,7 @@ public class JwtUtils {
     }
 
     private static Claims extractAllClaims(String jwtToken) {
-        return Jwts.parser().setSigningKey(SecurityConfig.getSECRET_KEY()).parseClaimsJws(jwtToken).getBody();
+        return Jwts.parser().setSigningKey(SecurityConfig.getJWT_SECRET_KEY()).parseClaimsJws(jwtToken).getBody();
     }
 
     private static LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
@@ -105,7 +105,7 @@ public class JwtUtils {
 
         return Jwts.builder().setClaims(getClaims(userDetails)).setSubject(userDetails.getUsername()).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.HS256, SecurityConfig.getSECRET_KEY())
+                .signWith(SignatureAlgorithm.HS256, SecurityConfig.getJWT_SECRET_KEY())
                 .compact();
     }
 

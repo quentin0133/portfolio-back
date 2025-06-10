@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
  */
 public record LoginCommandDto(
     @NotNull(groups = Default.class, message = "this property can't be null") String username,
-    @NotNull(groups = Default.class, message = "this property can't be null") String password
+    @NotNull(groups = Default.class, message = "this property can't be null") String password,
+    String captchaToken
 ) {
 }

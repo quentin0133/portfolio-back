@@ -62,7 +62,7 @@ public class SecurityConfig {
     private static final int EXPIRATION_TIME_SECONDS = 60 * 60 * 10;
 
     @Getter
-    private static String SECRET_KEY;
+    private static String JWT_SECRET_KEY;
     private final JwtAuthFilter jwtAuthFilter;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final UserDetailsService userDetailsService;
@@ -73,11 +73,11 @@ public class SecurityConfig {
     /**
      * Sets secret key.
      *
-     * @param secretKey the secret key
+     * @param secretKeyJwt the secret key
      */
-    @Value("${secret.key}")
-    public void setSecretKey(String secretKey) {
-      SECRET_KEY = secretKey;
+    @Value("${jwt.secret.key}")
+    public void setSecretKeyJwt(String secretKeyJwt) {
+      JWT_SECRET_KEY = secretKeyJwt;
     }
 
     /**
