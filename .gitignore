@@ -71,7 +71,7 @@ buildNumber.properties
 data
 
 # Uploaded files
-/files/
+/uploads/
 
 # Application properties used in dev
 application-*.properties
