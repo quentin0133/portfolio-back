@@ -14,6 +14,9 @@ import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The type Project mapper.
  */
@@ -33,7 +36,7 @@ public abstract class ProjectMapper extends GenericMapperAbstract<Project, Proje
 
     @Override
     @Mapping(source = "idsTag", target = "tags", qualifiedByName = "findTagById")
-    @Mapping(source = "coverImage", target = "coverImage")
+    @Mapping(target = "coverImage", ignore = true)
     @Mapping(target = "files", ignore = true)
     public abstract Project toEntity(ProjectCommandDto dto);
 
@@ -58,5 +61,9 @@ public abstract class ProjectMapper extends GenericMapperAbstract<Project, Proje
     protected File fileNameToAbstractRessource(MultipartFile multipartFile) {
         if (multipartFile == null) return null;
         return new File(multipartFile.getOriginalFilename(), null);
+    }
+
+    protected <T> List<T> mapList(List<T> list) {
+        return list == null ? new ArrayList<>() : list;
     }
 }

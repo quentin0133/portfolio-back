@@ -34,10 +34,11 @@ public interface ProjectService {
      * Save project query dto.
      *
      * @param dto the dto
+     * @param coverImage the cover image
      * @return the project query dto
      * @throws IOException the io exception
      */
-    ProjectQueryDto save(ProjectCommandDto dto) throws IOException;
+    ProjectQueryDto save(ProjectCommandDto dto, MultipartFile coverImage) throws IOException;
 
     /**
      * Update project query dto.
@@ -47,7 +48,7 @@ public interface ProjectService {
      * @throws ResourceNotFoundException the resource not found exception
      * @throws IOException               the io exception
      */
-    ProjectQueryDto update(ProjectCommandDto dto) throws ResourceNotFoundException, IOException;
+    ProjectQueryDto update(ProjectCommandDto dto, MultipartFile coverImage) throws ResourceNotFoundException, IOException;
 
     /**
      * Delete by id.

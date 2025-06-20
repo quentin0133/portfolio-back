@@ -62,13 +62,32 @@ public class ProjectController {
     /**
      * Save response entity.
      *
-     * @param dto the dto
+     * @param projectDto the dto
      * @return the response entity
      * @throws IOException the io exception
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProjectQueryDto> save(@Validated(OnCreate.class) @ModelAttribute ProjectCommandDto dto) throws IOException {
-        return ResponseEntity.ok(service.save(dto));
+    public ResponseEntity<ProjectQueryDto> save(
+        @RequestPart("project") @Validated(OnCreate.class) ProjectCommandDto projectDto,
+        @RequestPart("coverImage") MultipartFile coverImage
+    ) throws IOException {
+        return ResponseEntity.ok(service.save(projectDto, coverImage));
+    }
+
+    /**
+     * Update response entity.
+     *
+     * @param projectDto the dto
+     * @return the response entity
+     * @throws ResourceNotFoundException the resource not found exception
+     * @throws IOException               the io exception
+     */
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProjectQueryDto> update(
+        @RequestPart("project") @Validated(OnUpdate.class) ProjectCommandDto projectDto,
+        @RequestPart("coverImage") MultipartFile coverImage
+    ) throws ResourceNotFoundException, IOException {
+        return ResponseEntity.ok(service.update(projectDto, coverImage));
     }
 
     /**
@@ -82,19 +101,6 @@ public class ProjectController {
     @PutMapping(value = "/upload/{id}/files", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<FileDto>> uploadFiles(@PathVariable long id, @RequestParam("files") List<MultipartFile> files) throws IOException {
         return ResponseEntity.ok(service.uploadFiles(id, files));
-    }
-
-    /**
-     * Update response entity.
-     *
-     * @param dto the dto
-     * @return the response entity
-     * @throws ResourceNotFoundException the resource not found exception
-     * @throws IOException               the io exception
-     */
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProjectQueryDto> update(@Validated(OnUpdate.class) @ModelAttribute ProjectCommandDto dto) throws ResourceNotFoundException, IOException {
-        return ResponseEntity.ok(service.update(dto));
     }
 
     /**

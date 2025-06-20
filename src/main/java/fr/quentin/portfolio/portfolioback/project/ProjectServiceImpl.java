@@ -8,7 +8,6 @@ import fr.quentin.portfolio.portfolioback.files.dtos.FileDto;
 import fr.quentin.portfolio.portfolioback.project.dtos.ProjectCommandDto;
 import fr.quentin.portfolio.portfolioback.project.dtos.ProjectQueryDto;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
@@ -44,23 +43,27 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectQueryDto save(ProjectCommandDto dto) throws IOException {
+    public ProjectQueryDto save(ProjectCommandDto dto, MultipartFile coverImage) throws IOException {
         if (repository.existsByTitle(dto.getTitle()))
             throw new DuplicateKeyException(dto.getTitle());
-        if (ValidationUtils.checkFileType(dto.getCoverImage(), "image/*"))
-            throw new FileWrongFormatException("coverImage", "image");
+        if (ValidationUtils.checkFileType(coverImage, "image/*"))
+            throw new FileWrongFormatException(coverImage.getName(), "image");
 
         Project project = mapper.toEntity(dto);
 
-        // Upload cover image
-        project.setCoverImage(FileUtils.upload(dto.getCoverImage(), uploadDir));
+        if (coverImage != null && !coverImage.isEmpty()) {
+            FileUtils.delete(project.getCoverImage(), uploadDir);
+            project.setCoverImage(FileUtils.upload(coverImage, uploadDir));
+        }
 
         return mapper.toDto(repository.save(project));
     }
 
     @Override
-    public ProjectQueryDto update(ProjectCommandDto dto) throws ResourceNotFoundException, IOException {
+    public ProjectQueryDto update(ProjectCommandDto dto, MultipartFile coverImage) throws ResourceNotFoundException, IOException {
         if (!repository.existsById(dto.getId())) throw new ResourceNotFoundException("Project", dto.getId());
+        if (ValidationUtils.checkFileType(coverImage, "image/*"))
+            throw new FileWrongFormatException(coverImage.getName(), "image");
 
         // Duplicate title check
         ValidationUtils.checkDuplicateByName(
@@ -70,19 +73,14 @@ public class ProjectServiceImpl implements ProjectService {
             Project::getId
         );
 
-        if (ValidationUtils.checkFileType(dto.getCoverImage(), "image/*"))
-            throw new FileWrongFormatException(dto.getCoverImage().getName(), "image");
-
         Project project = mapper.toEntity(dto);
-        Project oldProject = repository.findById(dto.getId()).orElseThrow(() -> new ResourceNotFoundException("Project", dto.getId()));
 
-        // Upload cover image
-        if (dto.getCoverImage() != null) {
-            FileUtils.delete(oldProject.getCoverImage(), uploadDir);
-            project.setCoverImage(FileUtils.upload(dto.getCoverImage(), uploadDir));
+        if (coverImage != null && !coverImage.isEmpty()) {
+            FileUtils.delete(project.getCoverImage(), uploadDir);
+            project.setCoverImage(FileUtils.upload(coverImage, uploadDir));
         }
 
-        return mapper.toDto(repository.save(project));
+        return mapper.toDto(repository.save(mapper.toEntity(dto)));
     }
 
     @Override
@@ -106,7 +104,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-        public List<FileDto> uploadFiles(long id, List<MultipartFile> files) throws IOException {
+    public List<FileDto> uploadFiles(long id, List<MultipartFile> files) throws IOException {
         Project project = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Project", id));
 
         // Upload files

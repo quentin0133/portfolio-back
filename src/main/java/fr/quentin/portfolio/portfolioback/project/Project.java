@@ -5,6 +5,7 @@ import fr.quentin.portfolio.portfolioback.core.enums.ProjectStatus;
 import fr.quentin.portfolio.portfolioback.core.generic.BaseEntity;
 import fr.quentin.portfolio.portfolioback.core.validations.groups.Default;
 import fr.quentin.portfolio.portfolioback.files.File;
+import fr.quentin.portfolio.portfolioback.resource.link.ResourceLink;
 import fr.quentin.portfolio.portfolioback.tags.Tag;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,7 +49,7 @@ public class Project extends BaseEntity {
     @CollectionTable(
         name = "project_files",
         joinColumns = @JoinColumn(name = "project_id"),
-        foreignKey = @ForeignKey(name = "files_project_fk")
+        foreignKey = @ForeignKey(name = "fk_files_project")
     )
     private List<File> files;
 
@@ -60,8 +62,13 @@ public class Project extends BaseEntity {
     @Column(length = 11)
     private String idVideo;
 
-    @Column(length = 500)
-    private String gitLink;
+    @ElementCollection
+    @CollectionTable(
+        name = "project_git_links",
+        joinColumns = @JoinColumn(name = "project_id"),
+        foreignKey = @ForeignKey(name = "fk_git_links_project")
+    )
+    private List<ResourceLink> gitLinks = new ArrayList<>();
 
     @Column(length = 500)
     private String demoLink;
